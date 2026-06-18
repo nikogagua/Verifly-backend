@@ -2,32 +2,26 @@ const express = require("express");
 require("dotenv").config();
 
 const connectDb = require("./config/db");
+const app = express();
+const authRoutes = require("./routes/auth");
+const authMiddleware = require("./middleware/auth");
 
 const PORT = process.env.PORT || 3000;
 
-const app = express();
-
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Verifly Backend is running 🚀");
 });
 
-//testing if user will be added to db by visiting /teest-user route
-const User = require("./models/user");
-app.get("/test-user", async (req, res) => {
-  try {
-    const user = await User.create({
-      name: "Test User",
-      email: "test@gmail.com",
-      password: "123456",
-      role: "owner",
-    });
-
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+// testing if we get token
+app.get("/api/protected", authMiddleware, (req, res) => {
+  res.json({
+    message: "You are authorized",
+    user: req.user,
+  });
 });
 
 const startServer = async () => {
