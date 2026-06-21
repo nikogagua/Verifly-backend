@@ -2,10 +2,14 @@ const express = require("express");
 require("dotenv").config();
 
 const connectDb = require("./config/db");
+const app = express();
+const authRoutes = require("./routes/auth");
 
 const PORT = process.env.PORT || 3000;
 
-const app = express();
+app.use(express.json());
+
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Verifly Backend is running 🚀");
