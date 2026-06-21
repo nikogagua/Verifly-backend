@@ -4,7 +4,6 @@ require("dotenv").config();
 const connectDb = require("./config/db");
 const app = express();
 const authRoutes = require("./routes/auth");
-const authMiddleware = require("./middleware/auth");
 
 const PORT = process.env.PORT || 3000;
 
@@ -14,14 +13,6 @@ app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("Verifly Backend is running 🚀");
-});
-
-// testing if we get token
-app.get("/api/protected", authMiddleware, (req, res) => {
-  res.json({
-    message: "You are authorized",
-    user: req.user,
-  });
 });
 
 const startServer = async () => {
