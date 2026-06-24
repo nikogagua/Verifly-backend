@@ -101,3 +101,120 @@ Success response for going to protected route:
 The backend uses JWT authentication.
 
 After login, the frontend must save the token and send it in the Authorization header for protected routes.
+
+## Store API
+
+### Create Store
+
+**POST** `/api/store`
+
+Headers:
+
+```text
+Authorization: Bearer JWT_TOKEN
+```
+
+Request Body:
+
+```json
+{
+  "name": "Niko Store",
+  "description": "Test store",
+  "category": "Clothes",
+  "phone": "555123456",
+  "address": "Tbilisi"
+}
+```
+
+Success Response:
+
+```json
+{
+  "message": "Store created successfully",
+  "store": {}
+}
+```
+
+---
+
+### Get All Stores
+
+**GET** `/api/store`
+
+Success Response:
+
+```json
+{
+  "stores": []
+}
+```
+
+---
+
+### Get Current User Store
+
+**GET** `/api/store/me`
+
+Headers:
+
+```text
+Authorization: Bearer JWT_TOKEN
+```
+
+Success Response:
+
+```json
+{
+  "store": {}
+}
+```
+
+---
+
+### Update Store
+
+**PUT** `/api/store/me`
+
+Headers:
+
+```text
+Authorization: Bearer JWT_TOKEN
+```
+
+Request Body:
+
+```json
+{
+  "name": "Updated Store Name",
+  "description": "Updated description"
+}
+```
+
+Success Response:
+
+```json
+{
+  "message": "Store updated successfully",
+  "store": {}
+}
+```
+
+---
+
+### Delete Store
+
+**DELETE** `/api/store/me`
+
+Headers:
+
+```text
+Authorization: Bearer JWT_TOKEN
+```
+
+Success Response:
+
+```json
+{
+  "message": "Store deleted successfully"
+}
+```
