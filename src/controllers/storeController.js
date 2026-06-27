@@ -1,4 +1,5 @@
 const Store = require("../models/store");
+const Product = require("../models/product");
 
 exports.createStore = async (req, res, next) => {
   try {
@@ -84,16 +85,16 @@ exports.editStore = async (req, res, next) => {
       return res.status(404).json({ message: "Store not found" });
     }
 
-    store.name = req.body.name || store.name;
-    store.description = req.body.description || store.description;
-    store.category = req.body.category || store.category;
-    store.phone = req.body.phone || store.phone;
-    store.socials = req.body.socials || store.socials;
-    store.address = req.body.address || store.address;
-    store.logo = req.body.logo || store.logo;
-    store.primaryColor = req.body.primaryColor || store.primaryColor;
-    store.secondaryColor = req.body.secondaryColor || store.secondaryColor;
-    store.backgroundImage = req.body.backgroundImage || store.backgroundImage;
+    store.name = req.body.name ?? store.name;
+    store.description = req.body.description ?? store.description;
+    store.category = req.body.category ?? store.category;
+    store.phone = req.body.phone ?? store.phone;
+    store.socials = req.body.socials ?? store.socials;
+    store.address = req.body.address ?? store.address;
+    store.logo = req.body.logo ?? store.logo;
+    store.primaryColor = req.body.primaryColor ?? store.primaryColor;
+    store.secondaryColor = req.body.secondaryColor ?? store.secondaryColor;
+    store.backgroundImage = req.body.backgroundImage ?? store.backgroundImage;
 
     await store.save();
 
@@ -110,7 +111,7 @@ exports.editStore = async (req, res, next) => {
 
 exports.deleteStore = async (req, res, next) => {
   try {
-    const store = await Store.findOneAndDelete({
+    const store = await Store.findOne({
       owner: req.user.userId,
     });
     if (!store) {
@@ -118,6 +119,12 @@ exports.deleteStore = async (req, res, next) => {
         message: "Store not found",
       });
     }
+
+    await Product.deleteMany({
+      store: store._id,
+    });
+
+    await store.deleteOne();
 
     res.status(200).json({
       message: "Store deleted successfully",
