@@ -5,13 +5,15 @@ const connectDb = require("./config/db");
 const app = express();
 const authRoutes = require("./routes/auth");
 const storeRoutes = require("./routes/store");
+const productRoutes = require("./routes/product");
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/store", storeRoutes);
+app.use("/api/stores", storeRoutes);
+app.use("/api/products", productRoutes);
 
 app.get("/", (req, res) => {
   res.send("Verifly Backend is running 🚀");

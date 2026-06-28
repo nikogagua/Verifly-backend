@@ -1,16 +1,18 @@
 # Verifly-backend
 
-Backend repository for Verifly project.
+Backend repository for the Verifly project.
 
-## Running the Project
+---
 
-1. Install dependencies
+# Running the Project
+
+### 1. Install dependencies
 
 ```bash
 npm install
 ```
 
-2. Create a .env file
+### 2. Create a `.env` file
 
 ```env
 PORT=3000
@@ -18,19 +20,21 @@ MONGODB_URI=your_mongodb_connection_string
 JWT_SECRET=your_secret_key
 ```
 
-3. Start the server
+### 3. Start the server
 
 ```bash
 npm run dev
 ```
 
-## Authentication API
+---
 
-### Register User
+# Authentication API
+
+## Register User
 
 **POST** `/api/auth/signup`
 
-Request Body:
+### Request Body
 
 ```json
 {
@@ -40,7 +44,7 @@ Request Body:
 }
 ```
 
-Success Response:
+### Success Response
 
 ```json
 {
@@ -50,20 +54,20 @@ Success Response:
 
 ---
 
-### Login User
+## Login User
 
 **POST** `/api/auth/login`
 
-Request Body:
+### Request Body
 
 ```json
 {
-  "email": "niko@gmail.com",
+  "email": "email@gmail.com",
   "password": "123456"
 }
 ```
 
-Success Response:
+### Success Response
 
 ```json
 {
@@ -74,47 +78,29 @@ Success Response:
 
 ---
 
-### Protected Route Example
-
-**GET** `/api/protected`
-
-Headers:
-
-```text
-Authorization: Bearer JWT_TOKEN
-```
-
-Success response for going to protected route:
-
-```json
-{
-  "message": "You are authorized",
-  "user": {
-    "userId": "...",
-    "role": "explorer"
-  }
-}
-```
-
-## Authentication
+# Authentication
 
 The backend uses JWT authentication.
 
-After login, the frontend must save the token and send it in the Authorization header for protected routes.
+After logging in, the frontend should save the JWT token and include it in the `Authorization` header using the Bearer scheme when accessing protected endpoints.
 
-## Store API
-
-### Create Store
-
-**POST** `/api/store`
-
-Headers:
+Example:
 
 ```text
 Authorization: Bearer JWT_TOKEN
 ```
 
-Request Body:
+---
+
+# Store API
+
+## Create Store
+
+**POST** `/api/store`
+
+Authentication required.
+
+### Request Body
 
 ```json
 {
@@ -126,7 +112,7 @@ Request Body:
 }
 ```
 
-Success Response:
+### Success Response
 
 ```json
 {
@@ -137,11 +123,13 @@ Success Response:
 
 ---
 
-### Get All Stores
+## Get All Stores
 
 **GET** `/api/store`
 
-Success Response:
+No authentication required.
+
+### Success Response
 
 ```json
 {
@@ -151,17 +139,13 @@ Success Response:
 
 ---
 
-### Get Current User Store
+## Get Current User Store
 
 **GET** `/api/store/me`
 
-Headers:
+Authentication required.
 
-```text
-Authorization: Bearer JWT_TOKEN
-```
-
-Success Response:
+### Success Response
 
 ```json
 {
@@ -171,17 +155,13 @@ Success Response:
 
 ---
 
-### Update Store
+## Update Store
 
 **PUT** `/api/store/me`
 
-Headers:
+Authentication required.
 
-```text
-Authorization: Bearer JWT_TOKEN
-```
-
-Request Body:
+### Request Body
 
 ```json
 {
@@ -190,7 +170,7 @@ Request Body:
 }
 ```
 
-Success Response:
+### Success Response
 
 ```json
 {
@@ -201,20 +181,154 @@ Success Response:
 
 ---
 
-### Delete Store
+## Delete Store
 
 **DELETE** `/api/store/me`
 
-Headers:
+Authentication required.
 
-```text
-Authorization: Bearer JWT_TOKEN
-```
-
-Success Response:
+### Success Response
 
 ```json
 {
   "message": "Store deleted successfully"
+}
+```
+
+---
+
+# Product API
+
+## Get All Products
+
+**GET** `/api/products`
+
+No authentication required.
+
+### Success Response
+
+```json
+{
+  "products": []
+}
+```
+
+---
+
+## Get Product
+
+**GET** `/api/products/:productId`
+
+No authentication required.
+
+### Success Response
+
+```json
+{
+  "product": {}
+}
+```
+
+---
+
+## Create Product
+
+**POST** `/api/products/me`
+
+Authentication required.
+
+### Request Body
+
+```json
+{
+  "name": "Nike Air Max",
+  "description": "Running shoes",
+  "price": 150,
+  "images": [],
+  "category": "Shoes",
+  "stock": 15,
+  "isActive": true
+}
+```
+
+### Success Response
+
+```json
+{
+  "message": "Product created successfully",
+  "product": {}
+}
+```
+
+---
+
+## Get My Products
+
+**GET** `/api/products/me`
+
+Authentication required.
+
+### Success Response
+
+```json
+{
+  "products": []
+}
+```
+
+---
+
+## Get My Product
+
+**GET** `/api/products/me/:productId`
+
+Authentication required.
+
+### Success Response
+
+```json
+{
+  "product": {}
+}
+```
+
+---
+
+## Update Product
+
+**PUT** `/api/products/me/:productId`
+
+Authentication required.
+
+### Request Body
+
+```json
+{
+  "name": "Updated Product",
+  "price": 200
+}
+```
+
+### Success Response
+
+```json
+{
+  "product": {}
+}
+```
+
+---
+
+## Delete Product
+
+**DELETE** `/api/products/me/:productId`
+
+Authentication required.
+
+### Success Response
+
+```json
+{
+  "message": "Product deleted successfully"
 }
 ```
