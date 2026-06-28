@@ -1,6 +1,40 @@
 const Product = require("../models/product");
 const Store = require("../models/store");
 
+exports.getProducts = async (req, res, next) => {
+  try {
+    const products = await Product.find();
+
+    res.status(200).json({
+      products,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+exports.getPublicProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.productId);
+
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      product,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
 exports.myProducts = async (req, res, next) => {
   try {
     const store = await Store.findOne({
@@ -128,7 +162,6 @@ exports.deleteProduct = async (req, res) => {
   } catch (err) {
     res.status(500).json({
       message: err.message,
-      product,
     });
   }
 };
