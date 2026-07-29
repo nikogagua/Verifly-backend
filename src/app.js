@@ -6,10 +6,13 @@ const app = express();
 const authRoutes = require("./routes/auth");
 const storeRoutes = require("./routes/store");
 const productRoutes = require("./routes/product");
+const limiter = require("./middleware/rateLimit");
 
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+
+app.use(limiter);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/stores", storeRoutes);

@@ -20,7 +20,6 @@ const storeSchema = new Schema(
     },
     category: {
       type: String,
-      required: true,
     },
     phone: {
       type: String,

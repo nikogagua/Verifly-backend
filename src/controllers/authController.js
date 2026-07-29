@@ -1,11 +1,12 @@
 const User = require("../models/user");
+const Store = require("../models/store");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 exports.signup = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role, businessName, phone } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Missing fields" });
@@ -36,6 +37,11 @@ exports.signup = async (req, res, next) => {
         message: "Email already exists",
       });
     }
+    if (role === "owner" && (!businessName || !phone)) {
+      return res.status(400).json({
+        message: "Business name and phone are required for shop owners",
+      });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -43,7 +49,17 @@ exports.signup = async (req, res, next) => {
       name: cleanName,
       email: cleanEmail,
       password: hashedPassword,
+      role: role === "owner" ? "owner" : "explorer",
     });
+    let store = null;
+
+    if (role === "owner") {
+      store = await Store.create({
+        owner: user._id,
+        name: businessName,
+        phone,
+      });
+    }
 
     res.status(201).json({
       message: "User created successfully",
@@ -53,6 +69,7 @@ exports.signup = async (req, res, next) => {
         email: user.email,
         role: user.role,
       },
+      store,
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
